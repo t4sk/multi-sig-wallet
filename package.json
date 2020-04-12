@@ -1,8 +1,9 @@
 {
-  "name": "multi-sig-wallet-ts",
+  "name": "multi-sig-wallet",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@truffle/contract": "^4.1.6",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -13,7 +14,10 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2",
+    "web3": "^1.2.5"
   },
   "scripts": {
     "start": "react-scripts start",
