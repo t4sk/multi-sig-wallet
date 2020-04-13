@@ -1,7 +1,7 @@
 import Web3 from "web3";
 
 // https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md
-export async function unlockAccounts() {
+export async function unlockAccount() {
   // @ts-ignore
   const { ethereum } = window;
 
@@ -14,19 +14,19 @@ export async function unlockAccounts() {
 
   const accounts = await web3.eth.getAccounts();
 
-  return { web3, accounts };
+  return { web3, account: accounts[0] || "" };
 }
 
 export function subscribeToAccount(
   web3: Web3,
-  callback: (error: Error | undefined, account: string) => any
+  callback: (error: Error | undefined, account: string | undefined) => any
 ) {
   const id = setInterval(async () => {
     try {
       const accounts = await web3.eth.getAccounts();
-      callback(undefined, accounts[0] || "");
+      callback(undefined, accounts[0]);
     } catch (error) {
-      callback(error, "");
+      callback(error, undefined);
     }
   });
 
