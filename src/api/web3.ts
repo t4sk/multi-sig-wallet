@@ -28,7 +28,7 @@ export function subscribeToAccount(
     } catch (error) {
       callback(error, undefined);
     }
-  });
+  }, 1000);
 
   return () => {
     clearInterval(id);
