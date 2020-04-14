@@ -55,7 +55,9 @@ cp .env.sample .env.development
 
 # setup semantic ui
 
-# web3 context
+# web3 api, context, ui
+
+# multi sig wallet api, context, ui
 
 # Misc
 
