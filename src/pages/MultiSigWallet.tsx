@@ -1,5 +1,5 @@
 import React from "react";
-import { useMultiSigWalletContext } from "./contexts/MultiSigWallet";
+import { useMultiSigWalletContext } from "../contexts/MultiSigWallet";
 
 function MultiSigWallet() {
   const { state } = useMultiSigWalletContext();

@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { useWeb3Context } from "./contexts/Web3";
+import { useWeb3Context } from "../contexts/Web3";
 import MultiSigWallet from "./MultiSigWallet";
 
 function App() {
