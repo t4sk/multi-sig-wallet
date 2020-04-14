@@ -2,6 +2,8 @@ import Web3 from "web3";
 import TruffleContract from "@truffle/contract";
 import multiSigWalletTruffle from "../build/contracts/MultiSigWallet.json";
 
+// TODO funding
+
 // TODO fix ts error
 // @ts-ignore
 const MultiSigWallet = TruffleContract(multiSigWalletTruffle);
@@ -36,3 +38,30 @@ export async function get(web3: Web3): Promise<GetResponse> {
 }
 
 // TODO exercise subscribe network id
+
+export async function submitTx(
+  web3: Web3,
+  account: string,
+  params: {
+    to: string;
+    value: number;
+    data: string;
+  }
+) {
+  const { to, value, data } = params;
+
+  MultiSigWallet.setProvider(web3.currentProvider);
+
+  const multiSig = await MultiSigWallet.deployed();
+
+  const res = await multiSig.submitTransaction.sendTransaction(
+    to,
+    value,
+    data,
+    {
+      from: account
+    }
+  );
+
+  console.log(res);
+}

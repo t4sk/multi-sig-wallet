@@ -11,7 +11,6 @@ function App() {
       <div className="App-main">
         <h1>Multi Sig Wallet</h1>
         <div>Account: {web3.state.account}</div>
-        <h3>Contract</h3>
         <MultiSigWallet />
       </div>
     </div>
