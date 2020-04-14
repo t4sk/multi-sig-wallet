@@ -34,3 +34,5 @@ export async function get(web3: Web3): Promise<GetResponse> {
     // transactions
   };
 }
+
+// TODO exercise subscribe network id
