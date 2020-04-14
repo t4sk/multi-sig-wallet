@@ -1,4 +1,10 @@
 .App {
-  text-align: center;
   margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.App-main {
+  display: flex;
+  flex-direction: column;
 }

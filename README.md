@@ -25,6 +25,7 @@ truffle develop --log
 ```
 
 Copy the `build` folder into `multi-sig-wallet/src`
+NOTE: need to do this everytime
 
 ### Connect Metamask to Truffle
 
@@ -49,6 +50,12 @@ Copy `.env.sample` to `.env.development.local`
 ```shell
 cp .env.sample .env.development
 ```
+
+# install npm packages
+
+# setup semantic ui
+
+# web3 context
 
 # Misc
 

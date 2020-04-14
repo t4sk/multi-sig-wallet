@@ -8,13 +8,30 @@ import {
   Provider as Web3Provider,
   Updater as Web3Updater
 } from "./contexts/Web3";
+import {
+  Provider as MultiSigWalletProvider,
+  Updater as MultiSigWalletUpdater
+} from "./contexts/MultiSigWallet";
+
+const ContextProviders: React.FC<{}> = ({ children }) => (
+  <Web3Provider>
+    <MultiSigWalletProvider>{children}</MultiSigWalletProvider>
+  </Web3Provider>
+);
+
+const Updaters: React.FC<{}> = () => (
+  <>
+    <Web3Updater />
+    <MultiSigWalletUpdater />
+  </>
+);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Web3Provider>
-      <Web3Updater />
+    <ContextProviders>
+      <Updaters />
       <App />
-    </Web3Provider>
+    </ContextProviders>
   </React.StrictMode>,
   document.getElementById("root")
 );
