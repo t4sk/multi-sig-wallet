@@ -65,6 +65,12 @@ cp .env.sample .env.development
 
 # tx actions
 
+# subscriptions
+
+TODO
+
+- fix warnings
+
 # Misc
 
 ### Accounts

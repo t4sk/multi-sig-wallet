@@ -9,6 +9,8 @@ interface Props {
   onClose: (event?: any) => void;
 }
 
+// TODO fix modal blocks metamask
+
 const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
   const {
     state: { web3, account }

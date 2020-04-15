@@ -2,7 +2,7 @@ import Web3 from "web3";
 import BN from "bn.js";
 import React, { useReducer, useEffect, createContext, useContext } from "react";
 import { useWeb3Context } from "./Web3";
-import { get as getMultiSigWallet } from "../api/multi-sig-wallet";
+import { get as getMultiSigWallet, subscribe } from "../api/multi-sig-wallet";
 
 interface State {
   address: string;
@@ -113,7 +113,13 @@ export function Updater() {
     if (web3) {
       get(web3, account);
     }
-  }, [web3]);
+  }, [web3, account]);
+
+  useEffect(() => {
+    if (web3 && state.address) {
+      return subscribe(web3, state.address);
+    }
+  }, [web3, state.address]);
 
   return null;
 }

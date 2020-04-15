@@ -95,7 +95,7 @@ export function Updater() {
 
       return unsubscribe;
     }
-  }, [state.web3]);
+  }, [state.web3, state.account]);
 
   return null;
 }
