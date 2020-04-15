@@ -51,6 +51,7 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
     <Modal open={open} onClose={onClose}>
       <Modal.Header>Create Transaction</Modal.Header>
       <Modal.Content>
+        {error && <div style={{ color: "red" }}>{error.message}</div>}
         <Form onSubmit={onSubmit}>
           <Form.Field>
             <label>To</label>

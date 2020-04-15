@@ -54,14 +54,9 @@ export async function submitTx(
 
   const multiSig = await MultiSigWallet.deployed();
 
-  const res = await multiSig.submitTransaction.sendTransaction(
-    to,
-    value,
-    data,
-    {
-      from: account
-    }
-  );
+  const res = await multiSig.submitTransaction(to, value, data, {
+    from: account
+  });
 
   console.log(res);
 }
