@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import BN from "bn.js";
 import React, { useReducer, useEffect, createContext, useContext } from "react";
 import { useWeb3Context } from "./Web3";
 import { get as getMultiSigWallet } from "../api/multi-sig-wallet";
@@ -12,11 +13,13 @@ interface State {
 }
 
 interface Transaction {
+  txIndex: number;
   to: string;
-  value: number;
+  value: BN;
   data: string;
   executed: boolean;
   numConfirmations: number;
+  isConfirmedByCurrentAccount: boolean;
 }
 
 const INITIAL_STATE: State = {
@@ -36,6 +39,7 @@ interface SetAction {
     owners: string[];
     numConfirmationsRequired: number;
     transactionCount: number;
+    transactions: Transaction[];
   };
 }
 
@@ -59,6 +63,7 @@ interface SetInputs {
   owners: string[];
   numConfirmationsRequired: number;
   transactionCount: number;
+  transactions: Transaction[];
 }
 
 const MultiSigWalletContext = createContext({
@@ -91,13 +96,13 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
 
 export function Updater() {
   const {
-    state: { web3 }
+    state: { web3, account }
   } = useWeb3Context();
   const { state, set } = useMultiSigWalletContext();
 
-  async function get(web3: Web3) {
+  async function get(web3: Web3, account: string) {
     try {
-      const data = await getMultiSigWallet(web3);
+      const data = await getMultiSigWallet(web3, account);
       set(data);
     } catch (error) {
       console.error(error);
@@ -106,7 +111,7 @@ export function Updater() {
 
   useEffect(() => {
     if (web3) {
-      get(web3);
+      get(web3, account);
     }
   }, [web3]);
 

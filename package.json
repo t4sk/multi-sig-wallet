@@ -11,6 +11,7 @@
     "@types/node": "^13.11.1",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
+    "bn.js": "^5.1.1",
     "react": "^16.13.1",
     "react-async": "^10.0.1",
     "react-dom": "^16.13.1",

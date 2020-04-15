@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMultiSigWalletContext } from "../contexts/MultiSigWallet";
 import { Button } from "semantic-ui-react";
 import CreateTxModal from "./CreateTxModal";
+import TransactionList from "./TransactionList";
 
 function MultiSigWallet() {
   const { state } = useMultiSigWalletContext();
@@ -21,7 +22,11 @@ function MultiSigWallet() {
       <Button color="green" onClick={() => openModal(true)}>
         Create Transaction
       </Button>
-      <CreateTxModal open={open} onClose={() => openModal(false)} />
+      {open && <CreateTxModal open={open} onClose={() => openModal(false)} />}
+      <TransactionList
+        data={state.transactions}
+        count={state.transactionCount}
+      />
     </div>
   );
 }
