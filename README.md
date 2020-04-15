@@ -63,6 +63,8 @@ cp .env.sample .env.development
 
 # list transactions
 
+# tx actions
+
 # Misc
 
 ### Accounts
