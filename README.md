@@ -61,6 +61,8 @@ cp .env.sample .env.development
 
 # create tx (api, modal, form, react-async)
 
+# list transactions
+
 # Misc
 
 ### Accounts

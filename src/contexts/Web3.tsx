@@ -89,7 +89,7 @@ export function Updater() {
           console.error(error);
         }
         if (account !== undefined && account !== state.account) {
-          update({ account });
+          window.location.reload();
         }
       });
 

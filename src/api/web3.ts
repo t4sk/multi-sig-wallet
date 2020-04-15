@@ -17,6 +17,8 @@ export async function unlockAccount() {
   return { web3, account: accounts[0] || "" };
 }
 
+// TODO exercise subscribe network id
+
 export function subscribeToAccount(
   web3: Web3,
   callback: (error: Error | undefined, account: string | undefined) => any

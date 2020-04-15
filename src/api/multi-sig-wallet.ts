@@ -5,6 +5,8 @@ import multiSigWalletTruffle from "../build/contracts/MultiSigWallet.json";
 
 // TODO funding
 
+// TODO show contract balance
+
 // TODO fix ts error
 // @ts-ignore
 const MultiSigWallet = TruffleContract(multiSigWalletTruffle);
@@ -67,8 +69,6 @@ export async function get(web3: Web3, account: string): Promise<GetResponse> {
   };
 }
 
-// TODO exercise subscribe network id
-
 export async function submitTx(
   web3: Web3,
   account: string,
@@ -84,9 +84,61 @@ export async function submitTx(
 
   const multiSig = await MultiSigWallet.deployed();
 
-  const res = await multiSig.submitTransaction(to, value, data, {
+  await multiSig.submitTransaction(to, value, data, {
     from: account
   });
+}
 
-  console.log(res);
+export async function confirmTx(
+  web3: Web3,
+  account: string,
+  params: {
+    txIndex: number;
+  }
+) {
+  const { txIndex } = params;
+
+  MultiSigWallet.setProvider(web3.currentProvider);
+
+  const multiSig = await MultiSigWallet.deployed();
+
+  await multiSig.confirmTransaction(txIndex, {
+    from: account
+  });
+}
+
+export async function revokeConfirmation(
+  web3: Web3,
+  account: string,
+  params: {
+    txIndex: number;
+  }
+) {
+  const { txIndex } = params;
+
+  MultiSigWallet.setProvider(web3.currentProvider);
+
+  const multiSig = await MultiSigWallet.deployed();
+
+  await multiSig.revokeConfirmation(txIndex, {
+    from: account
+  });
+}
+
+export async function executeTx(
+  web3: Web3,
+  account: string,
+  params: {
+    txIndex: number;
+  }
+) {
+  const { txIndex } = params;
+
+  MultiSigWallet.setProvider(web3.currentProvider);
+
+  const multiSig = await MultiSigWallet.deployed();
+
+  await multiSig.executeTransaction(txIndex, {
+    from: account
+  });
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import BN from "bn.js";
+import TransactionActions from "./TransactionActions";
 
 interface Transaction {
   txIndex: number;
@@ -12,11 +13,16 @@ interface Transaction {
 }
 
 interface Props {
+  numConfirmationsRequired: number;
   count: number;
   data: Transaction[];
 }
 
-const TransactionList: React.FC<Props> = ({ count, data }) => {
+const TransactionList: React.FC<Props> = ({
+  numConfirmationsRequired,
+  count,
+  data
+}) => {
   return (
     <ul>
       {data.map(tx => (
@@ -27,6 +33,10 @@ const TransactionList: React.FC<Props> = ({ count, data }) => {
           <div>Data: {tx.data}</div>
           <div>Executed: {tx.executed.toString()}</div>
           <div>Confirmations: {tx.numConfirmations}</div>
+          <TransactionActions
+            numConfirmationsRequired={numConfirmationsRequired}
+            tx={tx}
+          />
         </li>
       ))}
     </ul>

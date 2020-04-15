@@ -24,6 +24,7 @@ function MultiSigWallet() {
       </Button>
       {open && <CreateTxModal open={open} onClose={() => openModal(false)} />}
       <TransactionList
+        numConfirmationsRequired={state.numConfirmationsRequired}
         data={state.transactions}
         count={state.transactionCount}
       />
