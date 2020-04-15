@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMultiSigWalletContext } from "../contexts/MultiSigWallet";
 import { Button } from "semantic-ui-react";
 import CreateTxModal from "./CreateTxModal";
 
 function MultiSigWallet() {
   const { state } = useMultiSigWalletContext();
-
-  function onClickCreateTx() {}
+  const [open, openModal] = useState(false);
 
   return (
     <div>
@@ -19,10 +18,10 @@ function MultiSigWallet() {
       </ul>
       <div>Confirmations required: {state.numConfirmationsRequired}</div>
       <h3>Transactions ({state.transactionCount})</h3>
-      <Button color="green" onClick={onClickCreateTx}>
+      <Button color="green" onClick={() => openModal(true)}>
         Create Transaction
       </Button>
-      <CreateTxModal />
+      <CreateTxModal open={open} onClose={() => openModal(false)} />
     </div>
   );
 }

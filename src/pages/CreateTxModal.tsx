@@ -4,10 +4,12 @@ import { useAsync } from "react-async";
 import { useWeb3Context } from "../contexts/Web3";
 import { submitTx } from "../api/multi-sig-wallet";
 
-function CreateTxModal() {
-  const open = false;
-  const onClose = () => {};
+interface Props {
+  open: boolean;
+  onClose: (event?: any) => void;
+}
 
+const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
   const {
     state: { web3, account }
   } = useWeb3Context();
@@ -44,8 +46,6 @@ function CreateTxModal() {
 
     run(inputs);
   }
-
-  console.log(error);
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -86,6 +86,6 @@ function CreateTxModal() {
       </Modal.Actions>
     </Modal>
   );
-}
+};
 
 export default CreateTxModal;
