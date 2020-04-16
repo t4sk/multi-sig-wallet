@@ -4,6 +4,7 @@ import { useWeb3Context } from "../contexts/Web3";
 import MultiSigWallet from "./MultiSigWallet";
 
 function App() {
+  // TODO fix cannot connect on start
   const web3 = useWeb3Context();
 
   return (
