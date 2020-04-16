@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form } from "semantic-ui-react";
+// TODO create useAsync
 import { useAsync } from "react-async";
 import { useWeb3Context } from "../contexts/Web3";
 import { submitTx } from "../api/multi-sig-wallet";
@@ -82,8 +83,15 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button color="green" onClick={onSubmit}>
+        <Button onClick={onClose} disabled={isPending}>
+          Cancel
+        </Button>
+        <Button
+          color="green"
+          onClick={onSubmit}
+          disabled={isPending}
+          loading={isPending}
+        >
           Create
         </Button>
       </Modal.Actions>
