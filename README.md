@@ -65,7 +65,7 @@ cp .env.sample .env.development
 
 # tx actions
 
-# subscriptions
+# subscriptions (event types, reducer)
 
 TODO
 

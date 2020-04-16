@@ -148,32 +148,75 @@ export async function executeTx(
   });
 }
 
-export function subscribe(web3: Web3, address: string) {
+export function subscribe(
+  web3: Web3,
+  address: string,
+  callback: (error: Error | null, log: Log | null) => void
+) {
   // TODO metamask
   // const web3 = new Web3();
   // web3.setProvider(new Web3.providers.WebsocketProvider("ws://localhost:9545"));
 
   const multiSig = new web3.eth.Contract(MultiSigWallet.abi, address);
 
-  const res = multiSig.events.allEvents((error: any, log: any) => {
-    console.log(error, log);
+  const res = multiSig.events.allEvents((error: Error, log: Log) => {
+    if (error) {
+      callback(error, null);
+    } else if (log) {
+      callback(null, log);
+    }
   });
 
   return () => res.unsubscribe();
 }
 
-/*
-    {logIndex: 0, transactionIndex: 0, transactionHash: "0x7ad28f9f02570c06eeb507e62709289da3894031fea0bbf9f1df22ff83fc5e8c", blockHash: "0x6774eff5054e045c34f2fe31c1313bb1568eb5411261a80d50d8756b68df8073", blockNumber: 5, …}
-    logIndex: 0
-    transactionIndex: 0
-    transactionHash: "0x7ad28f9f02570c06eeb507e62709289da3894031fea0bbf9f1df22ff83fc5e8c"
-    blockHash: "0x6774eff5054e045c34f2fe31c1313bb1568eb5411261a80d50d8756b68df8073"
-    blockNumber: 5
-    address: "0x0C8f89E9A5157f616eEce836EC8CaCBF650bcD22"
-    type: "mined"
-    id: "log_8ff67b64"
-    returnValues: Result {0: "0xF36467c4e023C355026066B8dC51456E7b791d99", 1: "0", 2: "0xF36467c4e023C355026066B8dC51456E7b791d99", 3: "0", 4: "0x00", owner: "0xF36467c4e023C355026066B8dC51456E7b791d99", txIndex: "0", to: "0xF36467c4e023C355026066B8dC51456E7b791d99", value: "0", data: "0x00"}
-    event: "SubmitTransaction"
-    signature: "0xd5a05bf70715ad82a09a756320284a1b54c9ff74cd0f8cce6219e79b563fe59d"
-  }
-  */
+interface Deposit {
+  event: "Deposit";
+  returnValues: {
+    sender: string;
+    amount: string;
+    balance: string;
+  };
+}
+
+interface SubmitTransaction {
+  event: "SubmitTransaction";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+    to: string;
+    value: string;
+    data: string;
+  };
+}
+
+interface ConfirmTransaction {
+  event: "ConfirmTransaction";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+  };
+}
+
+interface RevokeConfirmation {
+  event: "RevokeConfirmation";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+  };
+}
+
+interface ExecuteTransaction {
+  event: "ExecuteTransaction";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+  };
+}
+
+type Log = 
+  | Deposit
+  | SubmitTransaction
+  | ConfirmTransaction
+  | RevokeConfirmation
+  | ExecuteTransaction;

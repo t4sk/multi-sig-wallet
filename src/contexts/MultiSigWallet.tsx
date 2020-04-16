@@ -5,6 +5,7 @@ import { useWeb3Context } from "./Web3";
 import { get as getMultiSigWallet, subscribe } from "../api/multi-sig-wallet";
 
 interface State {
+  // TODO contract balance
   address: string;
   owners: string[];
   numConfirmationsRequired: number;
@@ -31,6 +32,8 @@ const INITIAL_STATE: State = {
 };
 
 const SET = "SET";
+const ADD_TX = "ADD_TX";
+// const UPDATE_TX = "UPDATE_TX";
 
 interface SetAction {
   type: "SET";
@@ -43,7 +46,17 @@ interface SetAction {
   };
 }
 
-type Action = SetAction;
+interface AddTxAction {
+  type: "ADD_TX";
+  data: {
+    txIndex: string;
+    to: string;
+    value: string;
+    data: string;
+  };
+}
+
+type Action = SetAction | AddTxAction;
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
   switch (action.type) {
@@ -51,6 +64,30 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
       return {
         ...state,
         ...action.data
+      };
+    }
+    case ADD_TX: {
+      const {
+        data: { txIndex, to, value, data }
+      } = action;
+
+      const transactions = [
+        {
+          txIndex: parseInt(txIndex),
+          to,
+          value: Web3.utils.toBN(value),
+          data,
+          executed: false,
+          numConfirmations: 0,
+          isConfirmedByCurrentAccount: false
+        },
+        ...state.transactions
+      ];
+
+      return {
+        ...state,
+        transactionCount: state.transactionCount + 1,
+        transactions
       };
     }
     default:
@@ -66,9 +103,17 @@ interface SetInputs {
   transactions: Transaction[];
 }
 
+interface AddTxInputs {
+  txIndex: string;
+  to: string;
+  value: string;
+  data: string;
+}
+
 const MultiSigWalletContext = createContext({
   state: INITIAL_STATE,
-  set: (_data: SetInputs) => {}
+  set: (_data: SetInputs) => {},
+  addTx: (_data: AddTxInputs) => {}
 });
 
 export function useMultiSigWalletContext() {
@@ -87,8 +132,15 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
     });
   }
 
+  function addTx(data: AddTxInputs) {
+    dispatch({
+      type: ADD_TX,
+      data
+    });
+  }
+
   return (
-    <MultiSigWalletContext.Provider value={{ state, set }}>
+    <MultiSigWalletContext.Provider value={{ state, set, addTx }}>
       {children}
     </MultiSigWalletContext.Provider>
   );
@@ -98,7 +150,7 @@ export function Updater() {
   const {
     state: { web3, account }
   } = useWeb3Context();
-  const { state, set } = useMultiSigWalletContext();
+  const { state, set, addTx } = useMultiSigWalletContext();
 
   async function get(web3: Web3, account: string) {
     try {
@@ -117,7 +169,17 @@ export function Updater() {
 
   useEffect(() => {
     if (web3 && state.address) {
-      return subscribe(web3, state.address);
+      return subscribe(web3, state.address, (error, log) => {
+        if (error) {
+          console.error(error);
+        } else if (log) {
+          switch (log.event) {
+            case "SubmitTransaction":
+              addTx(log.returnValues);
+              break;
+          }
+        }
+      });
     }
   }, [web3, state.address]);
 
