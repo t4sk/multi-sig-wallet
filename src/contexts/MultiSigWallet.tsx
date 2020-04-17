@@ -33,7 +33,7 @@ const INITIAL_STATE: State = {
 
 const SET = "SET";
 const ADD_TX = "ADD_TX";
-// const UPDATE_TX = "UPDATE_TX";
+const UPDATE_TX = "UPDATE_TX";
 
 interface SetAction {
   type: "SET";
@@ -56,7 +56,18 @@ interface AddTxAction {
   };
 }
 
-type Action = SetAction | AddTxAction;
+interface UpdateTxAction {
+  type: "UPDATE_TX";
+  data: {
+    account: string;
+    txIndex: string;
+    owner: string;
+    executed?: boolean;
+    confirmed?: boolean;
+  };
+}
+
+type Action = SetAction | AddTxAction | UpdateTxAction;
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
   switch (action.type) {
@@ -90,6 +101,43 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
         transactions
       };
     }
+    case UPDATE_TX: {
+      const { data } = action;
+
+      const txIndex = parseInt(data.txIndex);
+
+      const transactions = state.transactions.map(tx => {
+        if (tx.txIndex === txIndex) {
+          const updatedTx = {
+            ...tx
+          };
+
+          if (data.executed) {
+            updatedTx.executed = true;
+          }
+          if (data.confirmed !== undefined) {
+            if (data.confirmed) {
+              updatedTx.numConfirmations += 1;
+              updatedTx.isConfirmedByCurrentAccount =
+                data.owner === data.account;
+            } else {
+              updatedTx.numConfirmations -= 1;
+              if (data.owner === data.account) {
+                updatedTx.isConfirmedByCurrentAccount = false;
+              }
+            }
+          }
+
+          return updatedTx;
+        }
+        return tx;
+      });
+
+      return {
+        ...state,
+        transactions
+      };
+    }
     default:
       return state;
   }
@@ -110,10 +158,19 @@ interface AddTxInputs {
   data: string;
 }
 
+interface UpdateTxInputs {
+  account: string;
+  txIndex: string;
+  owner: string;
+  confirmed?: boolean;
+  executed?: boolean;
+}
+
 const MultiSigWalletContext = createContext({
   state: INITIAL_STATE,
   set: (_data: SetInputs) => {},
-  addTx: (_data: AddTxInputs) => {}
+  addTx: (_data: AddTxInputs) => {},
+  updateTx: (_data: UpdateTxInputs) => {}
 });
 
 export function useMultiSigWalletContext() {
@@ -139,8 +196,15 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
     });
   }
 
+  function updateTx(data: UpdateTxInputs) {
+    dispatch({
+      type: UPDATE_TX,
+      data
+    });
+  }
+
   return (
-    <MultiSigWalletContext.Provider value={{ state, set, addTx }}>
+    <MultiSigWalletContext.Provider value={{ state, set, addTx, updateTx }}>
       {children}
     </MultiSigWalletContext.Provider>
   );
@@ -150,7 +214,7 @@ export function Updater() {
   const {
     state: { web3, account }
   } = useWeb3Context();
-  const { state, set, addTx } = useMultiSigWalletContext();
+  const { state, set, addTx, updateTx } = useMultiSigWalletContext();
 
   async function get(web3: Web3, account: string) {
     try {
@@ -177,6 +241,30 @@ export function Updater() {
             case "SubmitTransaction":
               addTx(log.returnValues);
               break;
+            case "ConfirmTransaction":
+              updateTx({
+                ...log.returnValues,
+                confirmed: true,
+                account
+              });
+              break;
+            case "RevokeConfirmation":
+              updateTx({
+                ...log.returnValues,
+                confirmed: false,
+                account
+              });
+              break;
+            case "ExecuteTransaction":
+              updateTx({
+                ...log.returnValues,
+                executed: true,
+                account
+              });
+              break;
+            default:
+              // TODO deposit
+              console.log(log);
           }
         }
       });
