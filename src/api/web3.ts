@@ -21,14 +21,14 @@ export async function unlockAccount() {
 
 export function subscribeToAccount(
   web3: Web3,
-  callback: (error: Error | undefined, account: string | undefined) => any
+  callback: (error: Error | null, account: string | null) => any
 ) {
   const id = setInterval(async () => {
     try {
       const accounts = await web3.eth.getAccounts();
-      callback(undefined, accounts[0]);
+      callback(null, accounts[0]);
     } catch (error) {
-      callback(error, undefined);
+      callback(error, null);
     }
   }, 1000);
 
