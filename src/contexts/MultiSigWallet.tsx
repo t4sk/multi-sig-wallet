@@ -5,8 +5,8 @@ import { useWeb3Context } from "./Web3";
 import { get as getMultiSigWallet, subscribe } from "../api/multi-sig-wallet";
 
 interface State {
-  // TODO contract balance
   address: string;
+  balance: string;
   owners: string[];
   numConfirmationsRequired: number;
   transactionCount: number;
@@ -25,6 +25,7 @@ interface Transaction {
 
 const INITIAL_STATE: State = {
   address: "",
+  balance: "0",
   owners: [],
   numConfirmationsRequired: 0,
   transactionCount: 0,
@@ -39,6 +40,7 @@ interface SetAction {
   type: "SET";
   data: {
     address: string;
+    balance: string;
     owners: string[];
     numConfirmationsRequired: number;
     transactionCount: number;
@@ -145,6 +147,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 
 interface SetInputs {
   address: string;
+  balance: string;
   owners: string[];
   numConfirmationsRequired: number;
   transactionCount: number;

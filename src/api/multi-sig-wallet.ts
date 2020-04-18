@@ -5,8 +5,6 @@ import multiSigWalletTruffle from "../build/contracts/MultiSigWallet.json";
 
 // TODO funding
 
-// TODO show contract balance
-
 // TODO fix ts error
 // @ts-ignore
 const MultiSigWallet = TruffleContract(multiSigWalletTruffle);
@@ -23,6 +21,7 @@ interface Transaction {
 
 interface GetResponse {
   address: string;
+  balance: string;
   owners: string[];
   numConfirmationsRequired: number;
   transactionCount: number;
@@ -33,6 +32,11 @@ export async function get(web3: Web3, account: string): Promise<GetResponse> {
   MultiSigWallet.setProvider(web3.currentProvider);
 
   const multiSig = await MultiSigWallet.deployed();
+
+  const balance = web3.utils.fromWei(
+    await web3.eth.getBalance(multiSig.address),
+    "ether"
+  );
   const owners = await multiSig.getOwners();
   const numConfirmationsRequired = await multiSig.numConfirmationsRequired();
   const transactionCount = await multiSig.getTransactionCount();
@@ -62,6 +66,7 @@ export async function get(web3: Web3, account: string): Promise<GetResponse> {
 
   return {
     address: multiSig.address,
+    balance,
     owners,
     numConfirmationsRequired: numConfirmationsRequired.toNumber(),
     transactionCount: count,
@@ -214,7 +219,7 @@ interface ExecuteTransaction {
   };
 }
 
-type Log = 
+type Log =
   | Deposit
   | SubmitTransaction
   | ConfirmTransaction

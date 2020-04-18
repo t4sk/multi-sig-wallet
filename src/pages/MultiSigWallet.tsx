@@ -11,6 +11,7 @@ function MultiSigWallet() {
   return (
     <div>
       <div>Contract: {state.address}</div>
+      <div>Balance: {state.balance} ether</div>
       <h3>Owners</h3>
       <ul>
         {state.owners.map((owner, i) => (
