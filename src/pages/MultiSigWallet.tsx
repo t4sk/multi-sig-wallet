@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMultiSigWalletContext } from "../contexts/MultiSigWallet";
 import { Button } from "semantic-ui-react";
+import DepositForm from "./DepositForm";
 import CreateTxModal from "./CreateTxModal";
 import TransactionList from "./TransactionList";
 
@@ -11,7 +12,8 @@ function MultiSigWallet() {
   return (
     <div>
       <div>Contract: {state.address}</div>
-      <div>Balance: {state.balance} ether</div>
+      <h3>Balance: {state.balance} ether</h3>
+      <DepositForm />
       <h3>Owners</h3>
       <ul>
         {state.owners.map((owner, i) => (

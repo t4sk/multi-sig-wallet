@@ -60,7 +60,7 @@ export async function get(web3: Web3, account: string): Promise<GetResponse> {
       data: tx.data,
       executed: tx.executed,
       numConfirmations: tx.numConfirmations.toNumber(),
-      isConfirmedByCurrentAccount: isConfirmed
+      isConfirmedByCurrentAccount: isConfirmed,
     });
   }
 
@@ -70,8 +70,21 @@ export async function get(web3: Web3, account: string): Promise<GetResponse> {
     owners,
     numConfirmationsRequired: numConfirmationsRequired.toNumber(),
     transactionCount: count,
-    transactions
+    transactions,
   };
+}
+
+export async function deposit(
+  web3: Web3,
+  account: string,
+  params: {
+    value: BN;
+  }
+) {
+  MultiSigWallet.setProvider(web3.currentProvider);
+  const multiSig = await MultiSigWallet.deployed();
+
+  await multiSig.sendTransaction({ from: account, value: params.value });
 }
 
 // TODO FIX
@@ -84,6 +97,7 @@ export async function submitTx(
   account: string,
   params: {
     to: string;
+    // TODO BN
     value: number;
     data: string;
   }
@@ -91,11 +105,10 @@ export async function submitTx(
   const { to, value, data } = params;
 
   MultiSigWallet.setProvider(web3.currentProvider);
-
   const multiSig = await MultiSigWallet.deployed();
 
   await multiSig.submitTransaction(to, value, data, {
-    from: account
+    from: account,
   });
 }
 
@@ -109,11 +122,10 @@ export async function confirmTx(
   const { txIndex } = params;
 
   MultiSigWallet.setProvider(web3.currentProvider);
-
   const multiSig = await MultiSigWallet.deployed();
 
   await multiSig.confirmTransaction(txIndex, {
-    from: account
+    from: account,
   });
 }
 
@@ -127,11 +139,10 @@ export async function revokeConfirmation(
   const { txIndex } = params;
 
   MultiSigWallet.setProvider(web3.currentProvider);
-
   const multiSig = await MultiSigWallet.deployed();
 
   await multiSig.revokeConfirmation(txIndex, {
-    from: account
+    from: account,
   });
 }
 
@@ -145,11 +156,10 @@ export async function executeTx(
   const { txIndex } = params;
 
   MultiSigWallet.setProvider(web3.currentProvider);
-
   const multiSig = await MultiSigWallet.deployed();
 
   await multiSig.executeTransaction(txIndex, {
-    from: account
+    from: account,
   });
 }
 

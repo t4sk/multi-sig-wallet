@@ -11,14 +11,15 @@ interface Props {
 }
 
 // TODO fix modal blocks metamask
+// TODO use components/useAsync
 
 const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
   const {
-    state: { web3, account }
+    state: { web3, account },
   } = useWeb3Context();
 
   const { run, data, error, isPending } = useAsync({
-    deferFn: async args => {
+    deferFn: async (args) => {
       if (!web3) {
         throw new Error("No web3");
       }
@@ -26,19 +27,19 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
       await submitTx(web3, account, args[0]);
 
       onClose();
-    }
+    },
   });
 
   const [inputs, setInputs] = useState({
     to: "",
     value: 0,
-    data: ""
+    data: "",
   });
 
   function onChange(name: string, e: React.ChangeEvent<HTMLInputElement>) {
     setInputs({
       ...inputs,
-      [name]: e.target.value
+      [name]: e.target.value,
     });
   }
 
@@ -61,7 +62,7 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
             <Form.Input
               type="text"
               value={inputs.to}
-              onChange={e => onChange("to", e)}
+              onChange={(e) => onChange("to", e)}
             />
           </Form.Field>
           <Form.Field>
@@ -70,14 +71,14 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
               type="number"
               min={0}
               value={inputs.value}
-              onChange={e => onChange("value", e)}
+              onChange={(e) => onChange("value", e)}
             />
           </Form.Field>
           <Form.Field>
             <label>Data</label>
             <Form.Input
               value={inputs.data}
-              onChange={e => onChange("data", e)}
+              onChange={(e) => onChange("data", e)}
             />
           </Form.Field>
         </Form>
