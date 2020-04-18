@@ -29,14 +29,15 @@ const INITIAL_STATE: State = {
   owners: [],
   numConfirmationsRequired: 0,
   transactionCount: 0,
-  transactions: []
+  transactions: [],
 };
 
 const SET = "SET";
+const UPDATE_BALANCE = "UPDATE_BALANCE";
 const ADD_TX = "ADD_TX";
 const UPDATE_TX = "UPDATE_TX";
 
-interface SetAction {
+interface Set {
   type: "SET";
   data: {
     address: string;
@@ -48,7 +49,14 @@ interface SetAction {
   };
 }
 
-interface AddTxAction {
+interface UpdateBalance {
+  type: "UPDATE_BALANCE";
+  data: {
+    balance: string;
+  };
+}
+
+interface AddTx {
   type: "ADD_TX";
   data: {
     txIndex: string;
@@ -58,7 +66,7 @@ interface AddTxAction {
   };
 }
 
-interface UpdateTxAction {
+interface UpdateTx {
   type: "UPDATE_TX";
   data: {
     account: string;
@@ -69,19 +77,25 @@ interface UpdateTxAction {
   };
 }
 
-type Action = SetAction | AddTxAction | UpdateTxAction;
+type Action = Set | UpdateBalance | AddTx | UpdateTx;
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
   switch (action.type) {
     case SET: {
       return {
         ...state,
-        ...action.data
+        ...action.data,
+      };
+    }
+    case UPDATE_BALANCE: {
+      return {
+        ...state,
+        balance: action.data.balance,
       };
     }
     case ADD_TX: {
       const {
-        data: { txIndex, to, value, data }
+        data: { txIndex, to, value, data },
       } = action;
 
       const transactions = [
@@ -92,15 +106,15 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
           data,
           executed: false,
           numConfirmations: 0,
-          isConfirmedByCurrentAccount: false
+          isConfirmedByCurrentAccount: false,
         },
-        ...state.transactions
+        ...state.transactions,
       ];
 
       return {
         ...state,
         transactionCount: state.transactionCount + 1,
-        transactions
+        transactions,
       };
     }
     case UPDATE_TX: {
@@ -108,10 +122,10 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 
       const txIndex = parseInt(data.txIndex);
 
-      const transactions = state.transactions.map(tx => {
+      const transactions = state.transactions.map((tx) => {
         if (tx.txIndex === txIndex) {
           const updatedTx = {
-            ...tx
+            ...tx,
           };
 
           if (data.executed) {
@@ -137,7 +151,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 
       return {
         ...state,
-        transactions
+        transactions,
       };
     }
     default:
@@ -152,6 +166,10 @@ interface SetInputs {
   numConfirmationsRequired: number;
   transactionCount: number;
   transactions: Transaction[];
+}
+
+interface UpdateBalanceInputs {
+  balance: string;
 }
 
 interface AddTxInputs {
@@ -172,8 +190,9 @@ interface UpdateTxInputs {
 const MultiSigWalletContext = createContext({
   state: INITIAL_STATE,
   set: (_data: SetInputs) => {},
+  updateBalance: (_data: UpdateBalanceInputs) => {},
   addTx: (_data: AddTxInputs) => {},
-  updateTx: (_data: UpdateTxInputs) => {}
+  updateTx: (_data: UpdateTxInputs) => {},
 });
 
 export function useMultiSigWalletContext() {
@@ -188,26 +207,35 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
   function set(data: SetInputs) {
     dispatch({
       type: SET,
-      data
+      data,
+    });
+  }
+
+  function updateBalance(data: UpdateBalanceInputs) {
+    dispatch({
+      type: UPDATE_BALANCE,
+      data,
     });
   }
 
   function addTx(data: AddTxInputs) {
     dispatch({
       type: ADD_TX,
-      data
+      data,
     });
   }
 
   function updateTx(data: UpdateTxInputs) {
     dispatch({
       type: UPDATE_TX,
-      data
+      data,
     });
   }
 
   return (
-    <MultiSigWalletContext.Provider value={{ state, set, addTx, updateTx }}>
+    <MultiSigWalletContext.Provider
+      value={{ state, set, updateBalance, addTx, updateTx }}
+    >
       {children}
     </MultiSigWalletContext.Provider>
   );
@@ -215,9 +243,15 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
 
 export function Updater() {
   const {
-    state: { web3, account }
+    state: { web3, account },
   } = useWeb3Context();
-  const { state, set, addTx, updateTx } = useMultiSigWalletContext();
+  const {
+    state,
+    set,
+    updateBalance,
+    addTx,
+    updateTx,
+  } = useMultiSigWalletContext();
 
   async function get(web3: Web3, account: string) {
     try {
@@ -241,6 +275,9 @@ export function Updater() {
           console.error(error);
         } else if (log) {
           switch (log.event) {
+            case "Deposit":
+              updateBalance(log.returnValues);
+              break;
             case "SubmitTransaction":
               addTx(log.returnValues);
               break;
@@ -248,21 +285,21 @@ export function Updater() {
               updateTx({
                 ...log.returnValues,
                 confirmed: true,
-                account
+                account,
               });
               break;
             case "RevokeConfirmation":
               updateTx({
                 ...log.returnValues,
                 confirmed: false,
-                account
+                account,
               });
               break;
             case "ExecuteTransaction":
               updateTx({
                 ...log.returnValues,
                 executed: true,
-                account
+                account,
               });
               break;
             default:

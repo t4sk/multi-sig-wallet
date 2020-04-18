@@ -33,10 +33,7 @@ export async function get(web3: Web3, account: string): Promise<GetResponse> {
 
   const multiSig = await MultiSigWallet.deployed();
 
-  const balance = web3.utils.fromWei(
-    await web3.eth.getBalance(multiSig.address),
-    "ether"
-  );
+  const balance = await web3.eth.getBalance(multiSig.address);
   const owners = await multiSig.getOwners();
   const numConfirmationsRequired = await multiSig.numConfirmationsRequired();
   const transactionCount = await multiSig.getTransactionCount();

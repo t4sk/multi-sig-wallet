@@ -12,7 +12,7 @@ function MultiSigWallet() {
   return (
     <div>
       <div>Contract: {state.address}</div>
-      <h3>Balance: {state.balance} ether</h3>
+      <h3>Balance: {state.balance} wei</h3>
       <DepositForm />
       <h3>Owners</h3>
       <ul>
