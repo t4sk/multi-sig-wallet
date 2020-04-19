@@ -18,4 +18,5 @@ function App() {
   );
 }
 
+// TODO footer
 export default App;
