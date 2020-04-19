@@ -17,7 +17,7 @@ interface UnlockAccountResponse {
 function App() {
   const {
     state: { account },
-    update,
+    updateAccount,
   } = useWeb3Context();
 
   const { pending, error, call } = useAsync<
@@ -31,9 +31,8 @@ function App() {
     if (error) {
       console.error(error);
     }
-
     if (data) {
-      update(data);
+      updateAccount(data);
     }
   }
 
@@ -55,7 +54,7 @@ function App() {
             )}
             <Button
               color="green"
-              onClick={(e) => onClickConnect()}
+              onClick={() => onClickConnect()}
               disabled={pending}
               loading={pending}
             >

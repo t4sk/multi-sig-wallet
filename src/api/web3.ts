@@ -17,8 +17,6 @@ export async function unlockAccount() {
   return { web3, account: accounts[0] || "" };
 }
 
-// TODO exercise subscribe network id
-
 export function subscribeToAccount(
   web3: Web3,
   callback: (error: Error | null, account: string | null) => any
@@ -27,6 +25,25 @@ export function subscribeToAccount(
     try {
       const accounts = await web3.eth.getAccounts();
       callback(null, accounts[0]);
+    } catch (error) {
+      callback(error, null);
+    }
+  }, 1000);
+
+  return () => {
+    clearInterval(id);
+  };
+}
+
+// Exercise? subscribe network id
+export function subscribeToNetId(
+  web3: Web3,
+  callback: (error: Error | null, netId: number | null) => any
+) {
+  const id = setInterval(async () => {
+    try {
+      const netId = await web3.eth.net.getId();
+      callback(null, netId);
     } catch (error) {
       callback(error, null);
     }
