@@ -54,8 +54,6 @@ const DepositForm: React.FC<Props> = ({}) => {
         setInput("");
       }
     }
-
-    console.log(value.toString());
   }
 
   return (
