@@ -55,7 +55,11 @@ cp .env.sample .env.development
 
 # setup semantic ui
 
-# web3 api, context, ui
+# mock ui connect to metamask
+
+# web3 api, context
+
+# use async, connect to metamask ui
 
 # multi sig wallet api, context, ui
 
@@ -72,6 +76,7 @@ cp .env.sample .env.development
 TODO
 
 - fix warnings
+- fix TODOs
 
 # Misc
 

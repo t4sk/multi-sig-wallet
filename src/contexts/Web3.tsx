@@ -10,7 +10,7 @@ interface State {
 
 const INITIAL_STATE: State = {
   account: "",
-  web3: null
+  web3: null,
 };
 
 const UPDATE = "UPDATE";
@@ -30,7 +30,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
       return {
         ...state,
         web3,
-        account
+        account,
       };
     }
     default:
@@ -40,7 +40,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 
 const Web3Context = createContext({
   state: INITIAL_STATE,
-  update: (_data: { account: string; web3?: Web3 }) => {}
+  update: (_data: { account: string; web3?: Web3 }) => {},
 });
 
 export function useWeb3Context() {
@@ -55,7 +55,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
   function update(data: { account: string; web3?: Web3 }) {
     dispatch({
       type: UPDATE,
-      ...data
+      ...data,
     });
   }
 
@@ -67,20 +67,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
 };
 
 export function Updater() {
-  const { state, update } = useWeb3Context();
-
-  useEffect(() => {
-    async function unlock() {
-      try {
-        const { web3, account } = await unlockAccount();
-        update({ web3, account });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    unlock();
-  }, []);
+  const { state } = useWeb3Context();
 
   useEffect(() => {
     if (state.web3) {
