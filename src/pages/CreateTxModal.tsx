@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Web3 from "web3";
 import { Button, Modal, Form } from "semantic-ui-react";
 import { useAsync } from "react-async";
 import { useWeb3Context } from "../contexts/Web3";
@@ -46,7 +47,10 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
       return;
     }
 
-    run(inputs);
+    run({
+      ...inputs,
+      value: Web3.utils.toBN(inputs.value),
+    });
   }
 
   return (

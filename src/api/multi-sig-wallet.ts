@@ -92,8 +92,7 @@ export async function submitTx(
   account: string,
   params: {
     to: string;
-    // TODO BN
-    value: number;
+    value: BN;
     data: string;
   }
 ) {
