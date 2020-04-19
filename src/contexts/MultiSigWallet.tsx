@@ -303,7 +303,6 @@ export function Updater() {
               });
               break;
             default:
-              // TODO deposit
               console.log(log);
           }
         }

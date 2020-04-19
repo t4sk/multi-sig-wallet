@@ -3,8 +3,6 @@ import BN from "bn.js";
 import TruffleContract from "@truffle/contract";
 import multiSigWalletTruffle from "../build/contracts/MultiSigWallet.json";
 
-// TODO funding
-
 // TODO fix ts error
 // @ts-ignore
 const MultiSigWallet = TruffleContract(multiSigWalletTruffle);
@@ -84,7 +82,7 @@ export async function deposit(
   await multiSig.sendTransaction({ from: account, value: params.value });
 }
 
-// TODO FIX
+// TODO FIX tx fails due to nonce
 /*
 Error: [ethjs-rpc] rpc error with payload {"id":4197981957911,"jsonrpc":"2.0","params":["0xf9010b088477359400830182b4940c8f89e9a5157f616eece836ec8cacbf650bcd2280b8a4c6427474000000000000000000000000f36467c4e023c355026066b8dc51456e7b791d990000000000000000000000000
 NOTE: fix by resetting account nonce?
@@ -165,7 +163,7 @@ export function subscribe(
   address: string,
   callback: (error: Error | null, log: Log | null) => void
 ) {
-  // TODO metamask
+  // TODO subscribe to metamask web socket
   // const web3 = new Web3();
   // web3.setProvider(new Web3.providers.WebsocketProvider("ws://localhost:9545"));
 
