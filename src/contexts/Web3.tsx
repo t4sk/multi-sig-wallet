@@ -1,8 +1,7 @@
 import React, { useReducer, createContext, useContext, useEffect } from "react";
 import Web3 from "web3";
-import { unlockAccount, subscribeToAccount } from "../api/web3";
+import { subscribeToAccount } from "../api/web3";
 
-// TODO refactor like MultiSigWallet.tsx
 interface State {
   account: string;
   web3: Web3 | null;
@@ -15,11 +14,13 @@ const INITIAL_STATE: State = {
 
 const UPDATE = "UPDATE";
 
-interface Action {
+interface Update {
   type: "UPDATE";
   account: string;
   web3?: Web3;
 }
+
+type Action = Update;
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
   switch (action.type) {
