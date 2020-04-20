@@ -162,10 +162,6 @@ export function subscribe(
   address: string,
   callback: (error: Error | null, log: Log | null) => void
 ) {
-  // TODO subscribe to metamask web socket
-  // const web3 = new Web3();
-  // web3.setProvider(new Web3.providers.WebsocketProvider("ws://localhost:9545"));
-
   const multiSig = new web3.eth.Contract(MultiSigWallet.abi, address);
 
   const res = multiSig.events.allEvents((error: Error, log: Log) => {
