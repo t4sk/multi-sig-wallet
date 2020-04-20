@@ -6,6 +6,7 @@ import { unlockAccount } from "../api/web3";
 import useAsync from "../components/useAsync";
 import "./App.css";
 import MultiSigWallet from "./MultiSigWallet";
+import Footer from "./Footer";
 
 type UnlockAccountParams = null;
 
@@ -63,9 +64,9 @@ function App() {
           </>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
 
-// TODO footer
 export default App;

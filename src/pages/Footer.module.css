@@ -1,0 +1,15 @@
+.component {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.image {
+  height: 32px;
+  border-radius: 16px;
+  margin-right: 10px;
+}
+.bar {
+  margin-left: 15px;
+  margin-right: 15px;
+}
