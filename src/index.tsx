@@ -6,13 +6,15 @@ import App from "./pages/App";
 import * as serviceWorker from "./serviceWorker";
 import {
   Provider as Web3Provider,
-  Updater as Web3Updater
+  Updater as Web3Updater,
 } from "./contexts/Web3";
 import {
   Provider as MultiSigWalletProvider,
-  Updater as MultiSigWalletUpdater
+  Updater as MultiSigWalletUpdater,
 } from "./contexts/MultiSigWallet";
 
+// TODO deploy to ropsten
+// TODO deploy to netlify
 const ContextProviders: React.FC<{}> = ({ children }) => (
   <Web3Provider>
     <MultiSigWalletProvider>{children}</MultiSigWalletProvider>
