@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Web3 from "web3";
-import { Button, Modal, Form } from "semantic-ui-react";
-import { useAsync } from "react-async";
+import BN from "bn.js";
+import { Button, Modal, Form, Message } from "semantic-ui-react";
+import useAsync from "../components/useAsync";
 import { useWeb3Context } from "../contexts/Web3";
 import { submitTx } from "../api/multi-sig-wallet";
 
@@ -10,24 +11,26 @@ interface Props {
   onClose: (event?: any) => void;
 }
 
-// TODO use components/useAsync
+interface SubmitTxParams {
+  to: string;
+  value: BN;
+  data: string;
+}
 
 const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
   const {
     state: { web3, account },
   } = useWeb3Context();
 
-  const { run, data, error, isPending } = useAsync({
-    deferFn: async (args) => {
+  const { pending, error, call } = useAsync<SubmitTxParams, any>(
+    async (params) => {
       if (!web3) {
         throw new Error("No web3");
       }
 
-      await submitTx(web3, account, args[0]);
-
-      onClose();
-    },
-  });
+      await submitTx(web3, account, params);
+    }
+  );
 
   const [inputs, setInputs] = useState({
     to: "",
@@ -43,21 +46,25 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
   }
 
   async function onSubmit() {
-    if (isPending) {
+    if (pending) {
       return;
     }
 
-    run({
+    const { error } = await call({
       ...inputs,
       value: Web3.utils.toBN(inputs.value),
     });
+
+    if (!error) {
+      onClose();
+    }
   }
 
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Header>Create Transaction</Modal.Header>
       <Modal.Content>
-        {error && <div style={{ color: "red" }}>{error.message}</div>}
+        {error && <Message error>{error.message}</Message>}
         <Form onSubmit={onSubmit}>
           <Form.Field>
             <label>To</label>
@@ -86,14 +93,14 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={onClose} disabled={isPending}>
+        <Button onClick={onClose} disabled={pending}>
           Cancel
         </Button>
         <Button
           color="green"
           onClick={onSubmit}
-          disabled={isPending}
-          loading={isPending}
+          disabled={pending}
+          loading={pending}
         >
           Create
         </Button>
