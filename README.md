@@ -1,5 +1,13 @@
 ### memo
 
+### Connect Metamask to Truffle
+
+```
+click network > Custom RPC
+```
+
+### Import accounts from Truffle
+
 ### Getting started
 
 ```shell
@@ -27,30 +35,6 @@ truffle develop --log
 Copy the `build` folder into `multi-sig-wallet/src`
 NOTE: need to do this everytime
 
-### Connect Metamask to Truffle
-
-```
-click network > Custom RPC
-```
-
-### Import accounts from Truffle
-
-### React app environmental variable setup
-
-Create a file `.env.sample`
-
-Open `.env.sample` and add
-
-```
-REACT_APP_WEB3_WS_PROVIDER=ws://localhost:9545
-```
-
-Copy `.env.sample` to `.env.development.local`
-
-```shell
-cp .env.sample .env.development
-```
-
 # install npm packages
 
 # setup semantic ui
@@ -60,6 +44,8 @@ cp .env.sample .env.development
 # web3 api, context
 
 # use async, connect to metamask ui
+
+# exercise network id
 
 # multi sig wallet api, context, ui
 
