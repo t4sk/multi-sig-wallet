@@ -65,6 +65,19 @@ https://faucet.metamask.io/
 
 # deploy to ropsten
 
+Setup Infura
+
+```shell
+npm i --save-dev @truffle/hdwallet-provider
+```
+
+Copy paste truffle seed to `.seed`
+`.gitignore` `.seed`
+
+```shell
+truffle migrate --network ropsten
+```
+
 TODO
 
 - fix warnings

@@ -3,7 +3,6 @@ import BN from "bn.js";
 import TruffleContract from "@truffle/contract";
 import multiSigWalletTruffle from "../build/contracts/MultiSigWallet.json";
 
-// TODO fix ts error
 // @ts-ignore
 const MultiSigWallet = TruffleContract(multiSigWalletTruffle);
 
