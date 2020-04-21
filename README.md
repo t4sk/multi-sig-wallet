@@ -59,10 +59,15 @@ NOTE: need to do this everytime
 
 # subscriptions (event types, reducer, deposit, create, update tx)
 
+# ropsten faucet
+
+https://faucet.metamask.io/
+
+# deploy to ropsten
+
 TODO
 
 - fix warnings
-- fix TODOs
 
 # Misc
 
