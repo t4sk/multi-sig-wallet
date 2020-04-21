@@ -109,24 +109,24 @@ export function Updater() {
     }
   }, [state.web3, state.account]);
 
-  // useEffect(() => {
-  //   if (state.web3) {
-  //     const unsubscribe = subscribeToNetId(state.web3, (error, netId) => {
-  //       if (error) {
-  //         console.error(error);
-  //       }
-  //       if (netId) {
-  //         if (state.netId === 0) {
-  //           updateNetId({ netId });
-  //         } else if (netId !== state.netId) {
-  //           window.location.reload();
-  //         }
-  //       }
-  //     });
-  //
-  //     return unsubscribe;
-  //   }
-  // }, [state.web3, state.netId]);
+  useEffect(() => {
+    if (state.web3) {
+      const unsubscribe = subscribeToNetId(state.web3, (error, netId) => {
+        if (error) {
+          console.error(error);
+        }
+        if (netId) {
+          if (state.netId === 0) {
+            updateNetId({ netId });
+          } else if (netId !== state.netId) {
+            window.location.reload();
+          }
+        }
+      });
+
+      return unsubscribe;
+    }
+  }, [state.web3, state.netId]);
 
   return null;
 }

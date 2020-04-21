@@ -5,6 +5,7 @@ import { useWeb3Context } from "../contexts/Web3";
 import { unlockAccount } from "../api/web3";
 import useAsync from "../components/useAsync";
 import "./App.css";
+import Network from "./Network";
 import MultiSigWallet from "./MultiSigWallet";
 import Footer from "./Footer";
 
@@ -17,7 +18,7 @@ interface UnlockAccountResponse {
 
 function App() {
   const {
-    state: { account },
+    state: { account, netId },
     updateAccount,
   } = useWeb3Context();
 
@@ -43,6 +44,7 @@ function App() {
         <h1>Multi Sig Wallet</h1>
         {account ? (
           <>
+            {netId !== 0 && <Network netId={netId} />}
             <div>Account: {account}</div>
             <MultiSigWallet />
           </>
