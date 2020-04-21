@@ -1,4 +1,9 @@
+demo
+https://multi-sig.netlify.app/
+
 ### memo
+
+### Install metamask
 
 ### Connect Metamask to Truffle
 
@@ -77,10 +82,6 @@ Copy paste truffle seed to `.seed`
 ```shell
 truffle migrate --network ropsten
 ```
-
-TODO
-
-- fix warnings
 
 # Misc
 

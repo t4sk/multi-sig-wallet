@@ -13,8 +13,6 @@ import {
   Updater as MultiSigWalletUpdater,
 } from "./contexts/MultiSigWallet";
 
-// TODO deploy to ropsten
-// TODO deploy to netlify
 const ContextProviders: React.FC<{}> = ({ children }) => (
   <Web3Provider>
     <MultiSigWalletProvider>{children}</MultiSigWalletProvider>
