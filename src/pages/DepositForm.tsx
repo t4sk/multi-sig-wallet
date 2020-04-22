@@ -14,7 +14,7 @@ interface DepositParams {
   value: BN;
 }
 
-const DepositForm: React.FC<Props> = ({}) => {
+const DepositForm: React.FC<Props> = () => {
   const {
     state: { web3, account },
   } = useWeb3Context();
@@ -28,7 +28,7 @@ const DepositForm: React.FC<Props> = ({}) => {
     setInput(e.target.value);
   }
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(_e: React.FormEvent<HTMLFormElement>) {
     if (pending) {
       return;
     }

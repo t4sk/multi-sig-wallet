@@ -1,4 +1,10 @@
-import React, { useReducer, createContext, useContext, useEffect } from "react";
+import React, {
+  useReducer,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 import Web3 from "web3";
 import { subscribeToAccount, subscribeToNetId } from "../api/web3";
 
@@ -85,7 +91,16 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
   }
 
   return (
-    <Web3Context.Provider value={{ state, updateAccount, updateNetId }}>
+    <Web3Context.Provider
+      value={useMemo(
+        () => ({
+          state,
+          updateAccount,
+          updateNetId,
+        }),
+        [state]
+      )}
+    >
       {children}
     </Web3Context.Provider>
   );
@@ -126,7 +141,7 @@ export function Updater() {
 
       return unsubscribe;
     }
-  }, [state.web3, state.netId]);
+  }, [state.web3, state.netId, updateNetId]);
 
   return null;
 }

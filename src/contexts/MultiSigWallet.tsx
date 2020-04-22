@@ -1,6 +1,12 @@
 import Web3 from "web3";
 import BN from "bn.js";
-import React, { useReducer, useEffect, createContext, useContext } from "react";
+import React, {
+  useReducer,
+  useEffect,
+  createContext,
+  useContext,
+  useMemo,
+} from "react";
 import { useWeb3Context } from "./Web3";
 import { get as getMultiSigWallet, subscribe } from "../api/multi-sig-wallet";
 
@@ -234,7 +240,16 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
 
   return (
     <MultiSigWalletContext.Provider
-      value={{ state, set, updateBalance, addTx, updateTx }}
+      value={useMemo(
+        () => ({
+          state,
+          set,
+          updateBalance,
+          addTx,
+          updateTx,
+        }),
+        [state]
+      )}
     >
       {children}
     </MultiSigWalletContext.Provider>
@@ -253,20 +268,20 @@ export function Updater() {
     updateTx,
   } = useMultiSigWalletContext();
 
-  async function get(web3: Web3, account: string) {
-    try {
-      const data = await getMultiSigWallet(web3, account);
-      set(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   useEffect(() => {
+    async function get(web3: Web3, account: string) {
+      try {
+        const data = await getMultiSigWallet(web3, account);
+        set(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     if (web3) {
       get(web3, account);
     }
-  }, [web3, account]);
+  }, [web3, account, set]);
 
   useEffect(() => {
     if (web3 && state.address) {
@@ -308,7 +323,7 @@ export function Updater() {
         }
       });
     }
-  }, [web3, state.address]);
+  }, [web3, account, state.address, updateBalance, addTx, updateTx]);
 
   return null;
 }

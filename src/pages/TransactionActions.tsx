@@ -1,5 +1,4 @@
 import React from "react";
-import BN from "bn.js";
 import { Button } from "semantic-ui-react";
 import { useWeb3Context } from "../contexts/Web3";
 import useAsync from "../components/useAsync";
