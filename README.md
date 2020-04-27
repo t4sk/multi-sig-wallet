@@ -18,9 +18,6 @@ click network > Custom RPC
 ```shell
 create-react-app multi-sig-wallet --typescript
 
-npm i semantic-ui-css semantic-ui-react
-npm i web3 @truffle/contract
-
 npm start
 ```
 
@@ -34,13 +31,17 @@ migrate
 
 # open new terminal
 truffle develop --log
-
 ```
 
 Copy the `build` folder into `multi-sig-wallet/src`
 NOTE: need to do this everytime
 
 # install npm packages
+
+```
+npm i semantic-ui-css semantic-ui-react
+npm i web3 @truffle/contract bn.js
+```
 
 # setup semantic ui
 
@@ -66,19 +67,8 @@ NOTE: need to do this everytime
 
 # ropsten faucet
 
-https://faucet.metamask.io/
-
 # deploy to ropsten
 
-Setup Infura
+# ropsten faucet
 
-```shell
-npm i --save-dev @truffle/hdwallet-provider
-```
-
-Copy paste truffle seed to `.seed`
-`.gitignore` `.seed`
-
-```shell
-truffle migrate --network ropsten
-```
+# copy `build` to `src/`
