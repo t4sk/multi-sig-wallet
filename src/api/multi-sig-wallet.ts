@@ -95,7 +95,8 @@ export async function submitTx(
   account: string,
   params: {
     to: string;
-    value: BN;
+    // NOTE: error when passing BN type, so pass string
+    value: string;
     data: string;
   }
 ) {

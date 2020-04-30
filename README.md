@@ -3,15 +3,32 @@ https://multi-sig.netlify.app/
 
 ### memo
 
-### Install metamask
+[x] ### Install metamask
 
-### Connect Metamask to Truffle
+[x] ### Connect Metamask to Truffle
 
 ```
 click network > Custom RPC
 ```
 
-### Import accounts from Truffle
+[x] ### Import accounts from Truffle
+
+[ ] ### overview
+
+- [ ] demo
+- solidity, truffle, react, typescript, metamask, web3
+- prerequisites
+  - react
+    - hooks (useEffect, useReducer, useContext)
+    - reducer
+    - context
+  - typescript
+    - generics
+- app architecture
+  - folders
+  - context, app, updaters, web3
+    - submit tx data flow
+  - uniswap
 
 ### Getting started
 
@@ -20,6 +37,15 @@ create-react-app multi-sig-wallet --typescript
 
 npm start
 ```
+
+# install npm packages
+
+```
+npm i semantic-ui-css semantic-ui-react
+npm i web3 @truffle/contract bn.js
+```
+
+# setup semantic ui
 
 ### Setup Truffle for local dev
 
@@ -35,15 +61,6 @@ truffle develop --log
 
 Copy the `build` folder into `multi-sig-wallet/src`
 NOTE: need to do this everytime
-
-# install npm packages
-
-```
-npm i semantic-ui-css semantic-ui-react
-npm i web3 @truffle/contract bn.js
-```
-
-# setup semantic ui
 
 # mock ui connect to metamask
 

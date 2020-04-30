@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Web3 from "web3";
-import BN from "bn.js";
 import { Button, Modal, Form, Message } from "semantic-ui-react";
 import useAsync from "../components/useAsync";
 import { useWeb3Context } from "../contexts/Web3";
@@ -13,7 +11,7 @@ interface Props {
 
 interface SubmitTxParams {
   to: string;
-  value: BN;
+  value: string;
   data: string;
 }
 
@@ -52,7 +50,7 @@ const CreateTxModal: React.FC<Props> = ({ open, onClose }) => {
 
     const { error } = await call({
       ...inputs,
-      value: Web3.utils.toBN(inputs.value),
+      value: inputs.value.toString(),
     });
 
     if (!error) {
