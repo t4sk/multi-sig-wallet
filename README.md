@@ -13,7 +13,7 @@ click network > Custom RPC
 
 [x] ### Import accounts from Truffle
 
-[ ] ### overview
+[x] ### overview
 
 - [ ] demo
 - solidity, truffle, react, typescript, metamask, web3
@@ -30,7 +30,7 @@ click network > Custom RPC
     - submit tx data flow
   - uniswap
 
-### Getting started
+# Getting started
 
 ```shell
 create-react-app multi-sig-wallet --typescript
@@ -45,9 +45,7 @@ npm i semantic-ui-css semantic-ui-react
 npm i web3 @truffle/contract bn.js
 ```
 
-# setup semantic ui
-
-### Setup Truffle for local dev
+# Setup Truffle for local dev
 
 Inside solidity-multi-sig-wallet
 
@@ -62,13 +60,19 @@ truffle develop --log
 Copy the `build` folder into `multi-sig-wallet/src`
 NOTE: need to do this everytime
 
-# mock ui connect to metamask
+# reset metamask account
+
+# setup semantic ui
+
+# mock ui
 
 # web3 api, context
 
 # use async, connect to metamask ui
 
 # exercise network id
+
+---
 
 # multi sig wallet api, context, ui
 
@@ -81,6 +85,8 @@ NOTE: need to do this everytime
 # tx actions
 
 # subscriptions (event types, reducer, deposit, create, update tx)
+
+---
 
 # ropsten faucet
 
