@@ -6,19 +6,22 @@ import React, {
   useReducer,
 } from "react";
 import Web3 from "web3";
-import { subscribeToAccount } from "../api/web3";
+import { subscribeToAccount, subscribeToNetId } from "../api/web3";
 
 interface State {
   account: string;
   web3: Web3 | null;
+  netId: number;
 }
 
 const INITIAL_STATE: State = {
   account: "",
   web3: null,
+  netId: 0,
 };
 
 const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";
+const UPDATE_NET_ID = "UPDATE_NET_ID";
 
 interface UpdateAccount {
   type: "UPDATE_ACCOUNT";
@@ -26,7 +29,13 @@ interface UpdateAccount {
   web3?: Web3;
 }
 
-type Action = UpdateAccount;
+interface UpdateNetId {
+  type: "UPDATE_NET_ID";
+  // TODO: Exercise - What should the type of netId be?
+  netId: any;
+}
+
+type Action = UpdateAccount | UpdateNetId;
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
   switch (action.type) {
@@ -40,6 +49,12 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
         account,
       };
     }
+    case UPDATE_NET_ID: {
+      // TODO: Exercise - update net id
+      return {
+        ...state,
+      };
+    }
     default:
       return state;
   }
@@ -48,6 +63,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 const Web3Context = createContext({
   state: INITIAL_STATE,
   updateAccount: (_data: { account: string; web3?: Web3 }) => {},
+  updateNetId: (_data: { netId: number }) => {},
 });
 
 export function useWeb3Context() {
@@ -66,12 +82,17 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
     });
   }
 
+  function updateNetId(data: { netId: number }) {
+    // TODO: Exercise - Write function to dispatch action to update net id
+  }
+
   return (
     <Web3Context.Provider
       value={useMemo(
         () => ({
           state,
           updateAccount,
+          updateNetId,
         }),
         [state]
       )}
@@ -82,7 +103,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
 };
 
 export function Updater() {
-  const { state } = useWeb3Context();
+  const { state, updateNetId } = useWeb3Context();
 
   useEffect(() => {
     if (state.web3) {
@@ -98,6 +119,25 @@ export function Updater() {
       return unsubscribe;
     }
   }, [state.web3, state.account]);
+
+  useEffect(() => {
+    if (state.web3) {
+      const unsubscribe = subscribeToNetId(state.web3, (error, netId) => {
+        if (error) {
+          console.error(error);
+        }
+        if (netId) {
+          /*
+          TODO Exercise - Complete code to subscribe to net id.
+          If the state.netId is 0, then update the net id,
+          else reload the web page
+          */
+        }
+      });
+
+      return unsubscribe;
+    }
+  }, [state.web3, state.netId, updateNetId]);
 
   return null;
 }

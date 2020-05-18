@@ -5,10 +5,11 @@ import "./App.css";
 import useAsync from "./components/useAsync";
 import { useWeb3Context } from "./contexts/Web3";
 import Footer from "./Footer";
+import Network from "./Network";
 
 function App() {
   const {
-    state: { account },
+    state: { account, netId },
     updateAccount,
   } = useWeb3Context();
 
@@ -29,16 +30,28 @@ function App() {
     <div className="App">
       <div className="App-main">
         <h1>Multi Sig Wallet</h1>
-        <div>Account: {account}</div>
-        <Message warning>Metamask is not connected</Message>
-        <Button
-          color="green"
-          onClick={() => onClickConnect()}
-          disabled={pending}
-          loading={pending}
-        >
-          Connect to Metamask
-        </Button>
+        {account ? (
+          <>
+            {netId !== 0 && <Network netId={netId} />}
+            <div>Account: {account}</div>
+          </>
+        ) : (
+          <>
+            {error ? (
+              <Message error>{error.message}</Message>
+            ) : (
+              <Message warning>Metamask is not connected</Message>
+            )}
+            <Button
+              color="green"
+              onClick={() => onClickConnect()}
+              disabled={pending}
+              loading={pending}
+            >
+              Connect to Metamask
+            </Button>
+          </>
+        )}
       </div>
       <Footer />
     </div>
