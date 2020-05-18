@@ -1,37 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "semantic-ui-css/semantic.min.css";
+import App from "./App";
 import "./index.css";
-import App from "./pages/App";
 import * as serviceWorker from "./serviceWorker";
-import {
-  Provider as Web3Provider,
-  Updater as Web3Updater,
-} from "./contexts/Web3";
-import {
-  Provider as MultiSigWalletProvider,
-  Updater as MultiSigWalletUpdater,
-} from "./contexts/MultiSigWallet";
-
-const ContextProviders: React.FC<{}> = ({ children }) => (
-  <Web3Provider>
-    <MultiSigWalletProvider>{children}</MultiSigWalletProvider>
-  </Web3Provider>
-);
-
-const Updaters: React.FC<{}> = () => (
-  <>
-    <Web3Updater />
-    <MultiSigWalletUpdater />
-  </>
-);
 
 ReactDOM.render(
   <React.StrictMode>
-    <ContextProviders>
-      <Updaters />
-      <App />
-    </ContextProviders>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
