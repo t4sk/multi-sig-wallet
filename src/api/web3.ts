@@ -35,16 +35,20 @@ export function subscribeToAccount(
   };
 }
 
-/*
-TODO: Exercise
-Write a function to monitor for network id.
-Network id can be fetched by calling
-
-await web3.eth.net.getId()
-*/
 export function subscribeToNetId(
   web3: Web3,
   callback: (error: Error | null, netId: number | null) => any
 ) {
-  // Write your code here.
+  const id = setInterval(async () => {
+    try {
+      const netId = await web3.eth.net.getId();
+      callback(null, netId);
+    } catch (error) {
+      callback(error, null);
+    }
+  }, 1000);
+
+  return () => {
+    clearInterval(id);
+  };
 }

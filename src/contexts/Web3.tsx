@@ -31,8 +31,7 @@ interface UpdateAccount {
 
 interface UpdateNetId {
   type: "UPDATE_NET_ID";
-  // TODO: Exercise - What should the type of netId be?
-  netId: any;
+  netId: number;
 }
 
 type Action = UpdateAccount | UpdateNetId;
@@ -50,9 +49,11 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
       };
     }
     case UPDATE_NET_ID: {
-      // TODO: Exercise - update net id
+      const { netId } = action;
+
       return {
         ...state,
+        netId,
       };
     }
     default:
@@ -83,7 +84,10 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
   }
 
   function updateNetId(data: { netId: number }) {
-    // TODO: Exercise - Write function to dispatch action to update net id
+    dispatch({
+      type: UPDATE_NET_ID,
+      ...data,
+    });
   }
 
   return (
@@ -127,11 +131,11 @@ export function Updater() {
           console.error(error);
         }
         if (netId) {
-          /*
-          TODO Exercise - Complete code to subscribe to net id.
-          If the state.netId is 0, then update the net id,
-          else reload the web page
-          */
+          if (state.netId === 0) {
+            updateNetId({ netId });
+          } else if (netId !== state.netId) {
+            window.location.reload();
+          }
         }
       });
 
