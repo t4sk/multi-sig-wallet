@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, Message } from "semantic-ui-react";
-import { unlockAccount } from "./api/web3";
-import "./App.css";
-import useAsync from "./components/useAsync";
-import { useWeb3Context } from "./contexts/Web3";
+import { unlockAccount } from "../api/web3";
+import "./index.css";
+import useAsync from "../components/useAsync";
+import { useWeb3Context } from "../contexts/Web3";
+import MultiSigWallet from "./MultiSigWallet";
 import Footer from "./Footer";
 import Network from "./Network";
 
@@ -34,6 +35,7 @@ function App() {
           <>
             {netId !== 0 && <Network netId={netId} />}
             <div>Account: {account}</div>
+            <MultiSigWallet />
           </>
         ) : (
           <>
