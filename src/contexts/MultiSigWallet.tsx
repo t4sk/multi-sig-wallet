@@ -41,6 +41,7 @@ const INITIAL_STATE: State = {
 const SET = "SET";
 const UPDATE_BALANCE = "UPDATE_BALANCE";
 const ADD_TX = "ADD_TX";
+const UPDATE_TX = "UPDATE_TX";
 
 interface Set {
   type: "SET";
@@ -71,7 +72,18 @@ interface AddTx {
   };
 }
 
-type Action = Set | UpdateBalance | AddTx;
+interface UpdateTx {
+  type: "UPDATE_TX";
+  data: {
+    account: string;
+    txIndex: string;
+    owner: string;
+    executed?: boolean;
+    confirmed?: boolean;
+  };
+}
+
+type Action = Set | UpdateBalance | AddTx | UpdateTx;
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
   switch (action.type) {
@@ -111,6 +123,47 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
         transactions,
       };
     }
+    case UPDATE_TX: {
+      const { data } = action;
+
+      const txIndex = parseInt(data.txIndex);
+
+      const transactions = state.transactions.map((tx) => {
+        if (tx.txIndex === txIndex) {
+          const updatedTx = {
+            ...tx,
+          };
+
+          if (data.executed) {
+            /*
+            Exercise
+            Complete the if statement
+            Set updatedTx.executed to true
+            */
+          }
+          if (data.confirmed !== undefined) {
+            if (data.confirmed) {
+              updatedTx.numConfirmations += 1;
+              updatedTx.isConfirmedByCurrentAccount =
+                data.owner === data.account;
+            } else {
+              updatedTx.numConfirmations -= 1;
+              if (data.owner === data.account) {
+                updatedTx.isConfirmedByCurrentAccount = false;
+              }
+            }
+          }
+
+          return updatedTx;
+        }
+        return tx;
+      });
+
+      return {
+        ...state,
+        transactions,
+      };
+    }
     default:
       return state;
   }
@@ -136,11 +189,20 @@ interface AddTxInputs {
   data: string;
 }
 
+interface UpdateTxInputs {
+  account: string;
+  txIndex: string;
+  owner: string;
+  confirmed?: boolean;
+  executed?: boolean;
+}
+
 const MultiSigWalletContext = createContext({
   state: INITIAL_STATE,
   set: (_data: SetInputs) => {},
   updateBalance: (_data: UpdateBalanceInputs) => {},
   addTx: (_data: AddTxInputs) => {},
+  updateTx: (_data: UpdateTxInputs) => {},
 });
 
 export function useMultiSigWalletContext() {
@@ -173,6 +235,13 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
     });
   }
 
+  function updateTx(data: UpdateTxInputs) {
+    dispatch({
+      type: UPDATE_TX,
+      data,
+    });
+  }
+
   return (
     <MultiSigWalletContext.Provider
       value={useMemo(
@@ -181,6 +250,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
           set,
           updateBalance,
           addTx,
+          updateTx,
         }),
         [state]
       )}
@@ -194,7 +264,13 @@ export function Updater() {
   const {
     state: { web3, account },
   } = useWeb3Context();
-  const { state, set, updateBalance, addTx } = useMultiSigWalletContext();
+  const {
+    state,
+    set,
+    updateBalance,
+    addTx,
+    updateTx,
+  } = useMultiSigWalletContext();
 
   useEffect(() => {
     async function get(web3: Web3, account: string) {
@@ -224,6 +300,30 @@ export function Updater() {
             case "SubmitTransaction":
               addTx(log.returnValues);
               break;
+            case "ConfirmTransaction":
+              updateTx({
+                ...log.returnValues,
+                confirmed: true,
+                account,
+              });
+              break;
+            case "RevokeConfirmation":
+              updateTx({
+                ...log.returnValues,
+                confirmed: false,
+                account,
+              });
+              break;
+            /*
+            Exercise
+            Create a case statement for "ExecuteTransaction"
+            Call updateTx with the following input
+            {
+              ...log.returnValues,
+              executed: true,
+              account,
+            }
+            */
             default:
               console.log(log);
           }

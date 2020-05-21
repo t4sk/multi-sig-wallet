@@ -107,7 +107,16 @@ export async function confirmTx(
   params: {
     txIndex: number;
   }
-) {}
+) {
+  const { txIndex } = params;
+
+  MultiSigWallet.setProvider(web3.currentProvider);
+  const multiSig = await MultiSigWallet.deployed();
+
+  await multiSig.confirmTransaction(txIndex, {
+    from: account,
+  });
+}
 
 export async function revokeConfirmation(
   web3: Web3,
@@ -115,7 +124,16 @@ export async function revokeConfirmation(
   params: {
     txIndex: number;
   }
-) {}
+) {
+  const { txIndex } = params;
+
+  MultiSigWallet.setProvider(web3.currentProvider);
+  const multiSig = await MultiSigWallet.deployed();
+
+  await multiSig.revokeConfirmation(txIndex, {
+    from: account,
+  });
+}
 
 export async function executeTx(
   web3: Web3,
@@ -123,7 +141,12 @@ export async function executeTx(
   params: {
     txIndex: number;
   }
-) {}
+) {
+  /*
+  Exercise
+  Write code that will call executeTransaction on MultiSigWallet contract
+  */
+}
 
 export function subscribe(
   web3: Web3,
@@ -163,4 +186,41 @@ interface SubmitTransaction {
   };
 }
 
-type Log = Deposit | SubmitTransaction;
+interface ConfirmTransaction {
+  event: "ConfirmTransaction";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+  };
+}
+
+interface RevokeConfirmation {
+  event: "RevokeConfirmation";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+  };
+}
+
+/*
+Exercise
+Define an interface ExecuteTransaction.
+The shape of the interface should be the following:
+
+{
+  event: "ExecuteTransaction";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+  };
+}
+*/
+
+/*
+Exercise - Add ExecuteTransaction to Log type
+*/
+type Log =
+  | Deposit
+  | SubmitTransaction
+  | ConfirmTransaction
+  | RevokeConfirmation;
