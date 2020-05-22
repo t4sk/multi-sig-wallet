@@ -140,6 +140,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             Complete the if statement
             Set updatedTx.executed to true
             */
+            updatedTx.executed = true;
           }
           if (data.confirmed !== undefined) {
             if (data.confirmed) {
@@ -324,6 +325,13 @@ export function Updater() {
               account,
             }
             */
+            case "ExecuteTransaction":
+              updateTx({
+                ...log.returnValues,
+                executed: true,
+                account,
+              });
+              break;
             default:
               console.log(log);
           }

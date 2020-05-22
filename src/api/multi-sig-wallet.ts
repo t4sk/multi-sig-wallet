@@ -146,6 +146,14 @@ export async function executeTx(
   Exercise
   Write code that will call executeTransaction on MultiSigWallet contract
   */
+  const { txIndex } = params;
+
+  MultiSigWallet.setProvider(web3.currentProvider);
+  const multiSig = await MultiSigWallet.deployed();
+
+  await multiSig.executeTransaction(txIndex, {
+    from: account,
+  });
 }
 
 export function subscribe(
@@ -215,6 +223,13 @@ The shape of the interface should be the following:
   };
 }
 */
+interface ExecuteTransaction {
+  event: "ExecuteTransaction";
+  returnValues: {
+    owner: string;
+    txIndex: string;
+  };
+}
 
 /*
 Exercise - Add ExecuteTransaction to Log type
@@ -223,4 +238,5 @@ type Log =
   | Deposit
   | SubmitTransaction
   | ConfirmTransaction
-  | RevokeConfirmation;
+  | RevokeConfirmation
+  | ExecuteTransaction;
